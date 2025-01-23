@@ -1,99 +1,80 @@
 import java.util.ArrayList;
 import java.util.List;
 
-// Faculty Class (Independent of University or Department)
-class Faculty {
-    String name; // No encapsulation
+// Customer Class
+class Customer {
+    String name;
+    List<String> accounts; // List of account numbers
 
-    Faculty(String name) {
+    // Constructor
+    public Customer(String name) {
         this.name = name;
-    }
-}
-
-// Department Class (Dependent on University - Composition)
-class Department {
-    String name; // No encapsulation
-
-    Department(String name) {
-        this.name = name;
-    }
-}
-
-// University Class (Composes Departments and Aggregates Faculties)
-class University {
-    String name; // No encapsulation
-    List<Department> departments = new ArrayList<>(); // Composition
-    List<Faculty> faculties = new ArrayList<>();      // Aggregation
-
-    University(String name) {
-        this.name = name;
+        this.accounts = new ArrayList<>();
     }
 
-    // Add a department to the university
-    void addDepartment(String departmentName) {
-        departments.add(new Department(departmentName));
+    // Add an account
+    public void addAccount(String accountNumber) {
+        accounts.add(accountNumber);
     }
 
-    // Add a faculty member to the university
-    void addFaculty(Faculty faculty) {
-        faculties.add(faculty);
-    }
-
-    // Display all departments
-    void displayDepartments() {
-        System.out.println("Departments in " + name + ":");
-        for (Department department : departments) {
-            System.out.println("- " + department.name);
+    // View balances
+    public void viewBalance() {
+        System.out.println("Accounts for " + name + ":");
+        for (String account : accounts) {
+            System.out.println("Account Number: " + account);
         }
     }
+}
 
-    // Display all faculty members
-    void displayFaculties() {
-        System.out.println("Faculty members in " + name + ":");
-        for (Faculty faculty : faculties) {
-            System.out.println("- " + faculty.name);
-        }
+// Bank Class
+class Bank {
+    String name;
+    List<Customer> customers;
+
+    // Constructor
+    public Bank(String name) {
+        this.name = name;
+        this.customers = new ArrayList<>();
     }
 
-    // Delete the university (simulate deleting all departments)
-    void deleteUniversity() {
-        System.out.println("Deleting " + name + "...");
-        System.out.println("Deleting all departments...");
-        departments.clear();
-        System.out.println("University deleted.");
+    // Open an account
+    public void openAccount(Customer customer, String accountNumber) {
+        customer.addAccount(accountNumber);
+        if (!customers.contains(customer)) {
+            customers.add(customer);
+        }
+        System.out.println("Account " + accountNumber + " opened for " + customer.name);
+    }
+
+    // Display customers
+    public void displayCustomers() {
+        System.out.println("Customers of " + name + ":");
+        for (Customer customer : customers) {
+            System.out.println(customer.name);
+        }
     }
 }
 
-public class UniversitySystem {
+// Main Class
+public class BankSystem {
     public static void main(String[] args) {
-        // Create a university
-        University university = new University("Tech University");
+        // Create a bank
+        Bank bank = new Bank("National Bank");
 
-        // Add departments
-        university.addDepartment("Computer Science");
-        university.addDepartment("Mathematics");
+        // Create customers
+        Customer customer1 = new Customer("Aman");
+        Customer customer2 = new Customer("mohoan");
 
-        // Create faculty members (independent of the university)
-        Faculty faculty1 = new Faculty("Dr. John Doe");
-        Faculty faculty2 = new Faculty("Dr. Jane Smith");
+        // Open accounts
+        bank.openAccount(customer1, "ACC123");
+        bank.openAccount(customer2, "ACC456");
+        bank.openAccount(customer1, "ACC789");
 
-        // Add faculty to the university
-        university.addFaculty(faculty1);
-        university.addFaculty(faculty2);
+        // Display customers
+        bank.displayCustomers();
 
-        // Display departments and faculty members
-        university.displayDepartments();
-        university.displayFaculties();
-
-        // Demonstrate faculty independence
-        System.out.println("Faculty members exist independently of the university:");
-        System.out.println("- " + faculty1.name);
-        System.out.println("- " + faculty2.name);
-
-        // Delete the university and its departments
-        university.deleteUniversity();
-
-        // Attempt to display departments again
-        university.displayDepartments(); // Should show no departments
+        // View account details
+        customer1.viewBalance();
+        customer2.viewBalance();
     }
 }
